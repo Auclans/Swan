@@ -1,0 +1,79 @@
+.content{
+    position: absolute;
+    left: 20vw;
+    top: 15vh;
+    height: 70vh;
+    width:60vw
+}
+
+.navBar{
+    display: inline-block;
+    position : absolute;
+    left : 30vw;
+    top:7vh;
+    height: 5vh;
+    width : 40vw;
+    text-align: center;
+}
+
+.navBarItem{
+    display: inline-block;
+    margin : 0vh 1vw;
+}
+
+.algorithms {
+    display: inline-block;
+    position : absolute;
+    left : 30vw;
+    top:10vh;
+    height: 5vh;
+    width : 40vw;
+    text-align: center;
+}
+
+.algorithmsList{
+    height: 3vh;
+    text-align: center;
+
+}
+
+.algorithmsContent{
+    position: absolute;
+}
+
+.algoButton{
+    margin : 0vh 1vw;
+}
+
+.algoContent{
+    position: absolute;
+    bottom:30vh;
+    left : 1vw;
+}
+
+.column{
+    display: inline-block;
+    width: 0.25vw;
+} 
+
+.search{
+    position : absolute ;
+    bottom : 15vh ;
+    left : 25vw;
+}
+
+.restart{
+    position: absolute;
+    right: 0;
+}
+
+.addNode{
+    position: absolute;
+    bottom: 20vh;
+    left : 22.5vw;
+}
+
+.deleteNode{
+    height: 1vh;
+    width : 0.5vw;
+}
