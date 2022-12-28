@@ -1,4 +1,3 @@
-import { eventWrapper } from '@testing-library/user-event/dist/utils/index.js'
 import React from 'react'
 import ListNode from "./ListNode.jsx"
 
@@ -12,7 +11,15 @@ export default function LinkedListContent() {
     var yPositionUp = 20
     var yPositionDown = 30
 
-    listNodes[10] = {value : randomNumber, xPosition : xPosition , yPosition : yPositionUp, nextNode : null,index : 10,booleanYPositionUp : true}
+    listNodes[10] = {
+      value : randomNumber, 
+      xPosition : xPosition , 
+      yPosition : yPositionUp, 
+      nextNode : null,
+      index : 10,
+      booleanYPositionUp : true,
+      start : false
+    }
 
     // A linked list has a next node nested inside each node , but given that that node will 
     // also have a next node nested and so on , the final result is that the first node 
@@ -24,6 +31,15 @@ export default function LinkedListContent() {
 
     for (let i=9 ; i>=0 ; i--){
       randomNumber = Math.floor(Math.random()*11)
+
+      var start = false
+      if (i === 0 || i===1){
+        start = true
+      }
+
+      // We'll place the nodes alternatevely up and down 
+      // To do that we are just going to check if it can be divided by 2
+
         if (i%2 === 0){
           listNodes[i] = {
             value : randomNumber, 
@@ -31,15 +47,18 @@ export default function LinkedListContent() {
             yPosition : yPositionUp, 
             nextNode : listNodes[i+1],
             index : i ,
-            booleanYPositionUp : true
+            booleanYPositionUp : true,
+            start : start 
           }
         }else {
-          listNodes[i] = {value : randomNumber, 
+          listNodes[i] = {
+            value : randomNumber, 
             xPosition : xPosition += 5 , 
             yPosition : yPositionDown, 
             nextNode : listNodes[i+1],
             index : i ,
-            booleanYPositionUp : false
+            booleanYPositionUp : false,
+            start : start
           }
         }
     }
@@ -68,7 +87,8 @@ export default function LinkedListContent() {
           yPosition : lastOldNodeYPosition ? yPositionDown : yPositionUp ,
           nextNode : null ,
           index : lastOldNodeIndex + 1 ,
-          booleanYPositionUp : lastOldNodeYPosition ? false : true 
+          booleanYPositionUp : lastOldNodeYPosition ? false : true ,
+          start : false
         }
 
         // Add the new node to the state
@@ -84,9 +104,9 @@ export default function LinkedListContent() {
     }
 
     // Need to take the pressed node as input to delete it ? 
-    function deleteNode(event){
-      event.preventDefault();
-      const indexToDelete = event.target.name
+    function deleteNode(index){
+
+      const indexToDelete = index
       
       setNodes( prev => {
         const oldNodes = JSON.parse(JSON.stringify(prev))
@@ -98,7 +118,6 @@ export default function LinkedListContent() {
         if  (oldNodes[indexToDelete].nextNode === null){
           oldNodes[indexToDelete-1].nextNode = null
         }else if (oldNodes[indexToDelete].nextNode !== null){
-          //////////////// FFFFFFIIIIIIIXXXXXXX
           oldNodes[indexToDelete-1].nextNode = oldNodes[indexToDelete].nextNode
         }
 
@@ -117,14 +136,13 @@ export default function LinkedListContent() {
           yPosition : previousNode.booleanYPositionUp ? yPositionDown : yPositionUp ,
           nextNode : oldNodes[i].nextNode ,
           index : previousNode.index + 1 ,
-          booleanYPositionUp : previousNode.booleanYPositionUp ? false : true 
+          booleanYPositionUp : previousNode.booleanYPositionUp ? false : true ,
+          start : oldNodes[i].start
           }
         }
         return oldNodes
       });
     }
-
-    console.log(nodes)
 
   return ( <div >
       {nodes.map((node,index)=>{
@@ -133,9 +151,13 @@ export default function LinkedListContent() {
           xPosition={node.xPosition} 
           yPosition={node.yPosition} 
           value={node.value} 
-          key={index} 
+          key={node.index} 
+          nextNode={node.nextNode}
+          booleanYPositionUp={node.booleanYPositionUp}
+          start={node.start}
+          index={node.index}
+          deleteNode={deleteNode}
           />
-          <button name={index} onClick={deleteNode}></button>
         </div>
       })}
       <div className='addNode'>
