@@ -59,7 +59,7 @@
 .search{
     position : absolute ;
     bottom : 15vh ;
-    left : 25vw;
+    left : 22.5vw;
 }
 
 .restart{
@@ -78,3 +78,15 @@
     width : 0.5vw;
 }
 
+.letters{
+    display: inline-block;
+}
+
+.string{
+    position: absolute;
+    text-align: center;
+    bottom:40vh;
+    /* To center it using position absolute */
+    left : 0vw;
+    right : 0vw;
+}
