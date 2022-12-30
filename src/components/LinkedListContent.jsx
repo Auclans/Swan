@@ -3,6 +3,11 @@ import ListNode from "./ListNode.jsx"
 
 export default function LinkedListContent() {
 
+    // We are going to simulate a linked list , because the truth is 
+    // that in order to show the changes that we do to the linked list
+    // we need an array to map the changes . Still we'll try to be as 
+    // rigorous as possible .
+
     var listNodes = []
 
     var randomNumber = Math.floor(Math.random()*11)
@@ -25,7 +30,7 @@ export default function LinkedListContent() {
     // also have a next node nested and so on , the final result is that the first node 
     // will contain all the elements of the list . 
 
-    // We will create the linked list starting from the end , using the intial value that points
+    // We will create the "linked list" starting from the end , using the intial value that points
     // to null , and we will just nest the previous node created as we descend to the begginig 
     // of the linked list , causing the effect previsouly described 
 
@@ -63,6 +68,9 @@ export default function LinkedListContent() {
         }
     }
 
+    // With this the real linked list would be : 
+    // var linkedList = listNodes[0]
+
     var [nodes,setNodes] = React.useState(listNodes)
     var [newNode , updateNewNode] = React.useState("")
 
@@ -74,6 +82,7 @@ export default function LinkedListContent() {
         const oldNodes = JSON.parse(JSON.stringify(prev))
 
         // We are going to specify the new node properties based on last one
+        // FFFIIIIIXXXXX
         const lastOldNode = oldNodes.length - 1
         const lastOldNodeIndex = oldNodes[lastOldNode].index
         const lastOldNodeXPosition = oldNodes[lastOldNode].xPosition
@@ -91,7 +100,7 @@ export default function LinkedListContent() {
           start : false
         }
 
-        // Add the new node to the state
+        // Add the new node to the state so that it can be mapped and showed
         oldNodes.push(nodeToAdd)
 
         // Make the old last node point to the new node

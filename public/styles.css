@@ -90,3 +90,9 @@
     left : 0vw;
     right : 0vw;
 }
+
+.addTreeNode{
+    position : absolute ;
+    bottom : 5vh ;
+    left : 22.5vw;
+}
