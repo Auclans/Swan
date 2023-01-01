@@ -5,14 +5,14 @@ import TreeNode from "./TreeNode.jsx"
 
 export default function BinaryTreeContent() {
   // The same that we did with the linked list , we are going to 
-  // create the data structure and work with like naturally , 
+  // create the data structure and work with it naturally , 
   // but to show the changes we need an array because the map 
   // function only works with arrays !
   // This case is a little different because we actually need the
   // real tree to be able to traverse it using bfs , so we'll set 
   // a state for the real tree and another for the mapping array 
   
-  // All of this could easily be done using a 2D grid and  
+  // Its likely that all of this could easily be done using a 2D grid and  
   // showing and hiding each node when adding or deleting , but
   // i consider that the real challenge is using a real tree to
   // to support the logic of the operations .  
@@ -23,8 +23,10 @@ export default function BinaryTreeContent() {
   // We'll also need to diplay the tree -> xposition,yposition
   var xPosition = 74
   var yPosition = 62
+  // We'll need to know the current height of each node and have an index for the map array
   var currentHeight = Math.ceil(totalNodes/4)+1
   var index = -1 
+  // Relational array that we'll use to locate the nodes
   var heightsShifts = [30 , 23/2 , 11.75/2 , 6/2]
 
   // Each height of a binary tree doubles the length ,so we are
@@ -35,7 +37,7 @@ export default function BinaryTreeContent() {
     var nodesInHeight = Math.ceil(i/2)
     // All nodes at same height will have same yPosition
     yPosition -= 12.5
-    // For each height xPosition will have to start sooner 
+    // For each height xPosition will have to start sooner ,
     currentHeight -= 1
     if (nodesInHeight === 8){
       xPosition = 2.5
@@ -50,7 +52,7 @@ export default function BinaryTreeContent() {
     for (let j=nodesInHeight ; j>0 ; j--){
       var randomNumber = Math.floor(Math.random() * 16)
 
-      // We update xPosition for each node in the same height 
+      // We update xPosition for each node in the same height . Initial values
       if (nodesInHeight === 8){
         var shiftHeight = 6
         xPosition += shiftHeight
@@ -59,7 +61,7 @@ export default function BinaryTreeContent() {
         xPosition += shiftHeight
       }else if (nodesInHeight === 2){
         shiftHeight = 23
-        xPosition += shiftHeight 
+        xPosition += shiftHeight
       }
       
       // We update the index for each node
@@ -117,7 +119,6 @@ console.log("------------------------------------------")
 
   function addTreeNode(event){
     event.preventDefault();
-//------------------------------------------------------------------------------------------------------------------------------------
 
     // We are going to add the node to the left of the last height
     setTreeNodes(prev =>{
@@ -159,7 +160,7 @@ console.log("------------------------------------------")
           while (queue.length !== 0){
 
             parentNeighbour = queue.shift()
-            if (parentNeighbour.height === parentHeight && parentNeighbour.index !== parentIndex){
+            if (parentNeighbour.height === parentHeight && parentNeighbour.index < parentIndex){
 
               // We are adding child1 first to the queue, so we'll be popping out as first node child1 ,
               // what is enough to say that the first time that we find a child , it will be the closest
@@ -193,17 +194,10 @@ console.log("------------------------------------------")
       }
 
       // We'll use the node to fill properties to define the new one
-      const lastNodeXPosition = lastNode.xPosition;
+
       const lastNodeYPosition = lastNode.yPosition;
-      const lastNodeIndex = lastNode.index;
       const lastNodeHeight = lastNode.height
-      console.log(lastNode)
-// to handle position just must differ between child 1 and child 2 , the rest is the same 
-// height will always increment because it will be a child , and so row.column and xposition need actual row info
-// Bfs handles height automatically ! -> always child
-// just fix column and xposition
-// xposition must be given by height ! create key to acces to the current shift of height ? -> .shiftHeight[row]
-// Also update column -> only wrong xposition and col
+
       // Handle of xPosition 
       
       // We'll need to place the node in the right position in the array and 
@@ -251,19 +245,11 @@ console.log("------------------------------------------")
       // We'll add the new node to the right index
       oldTreeNodes.splice(indexToPlace,0,newNode)
       
-
       // And we must update the rest of the nodes indexes with the new size of the array 
       // We are just going to traverse it all
       for ( let i=0 ; i<oldTreeNodes.length ; i++){
-        oldTreeNodes[i] = {
-          ...oldTreeNodes[i],
-          index : i
-        }
+        oldTreeNodes[i].index = i
       }
-
-     
-      
-
 
       // Also need to update the head of the binary tree , the real binary tree,
       // because we'll need it for next head traverses
@@ -272,7 +258,7 @@ console.log("------------------------------------------")
       // Need to setup this boolean variable to avoid the setHead from running 2 times
       // Cant understand why it happens but this fixes it because it avoid rerun in the loop
       var found = false
-//------------------------------------------------------------------------------------------------------------------------------------
+
       setHead((prev)=>{
         var newHead = JSON.parse(JSON.stringify(prev))
         var traverseTree = newHead
@@ -331,14 +317,6 @@ console.log("------------------------------------------")
       return oldTreeNodes
     })
     setNodeToAdd("")
-
-    // if (treeNodes.length === totalNodes){
-    //   setBlockNodeAdd(false)
-    // }else{
-    //   setBlockNodeAdd(true)
-    // }
- 
-
   }
 
   function deleteTreeNode(nodeToDelete){
@@ -398,6 +376,7 @@ console.log("------------------------------------------")
       // Now we'll update the relationships inside the keys of the parent node to show the new situation
       // This could be skipped without any consequence but we'll modify it anyway because of consistency purposes 
       const parentIndex = lastNode.index
+
       oldTreeNodes[parentIndex][childNumber] = null
 
       // We also have to delete the mapping of the node to visually show the changes => map array
@@ -434,20 +413,21 @@ console.log("------------------------------------------")
       // each node in the array because we delete items using the index that they
       // store to find the position in the array , and so if we want to delete more
       //  afterwards we'll need the correct indexes to locate them succesfully !
-
       for ( let i=oldTreeNodes.length-1 ; i>=0 ; i--){
-        oldTreeNodes[i] = {
-          ...oldTreeNodes[i],
-          index : i
-        }
+        oldTreeNodes[i].index = i
       }
-      return oldTreeNodes
-    })
 
-    // We'll also update the real binary tree because we'll need it for the next bfs
-    // traverses when next nodes are deleted !
+      // We'll also update the real binary tree because we'll need it for the next bfs
+      // traverses when next nodes are deleted !
+      const parentHeight = JSON.parse(JSON.stringify(lastNode.height))
 
+      var runOnlyOnce = false 
     setHead((prev)=>{
+
+      // To prevent it from running twice ,which i dont know why it happens but maybe 
+      // because we are updating a state inside the update of another state ?
+      if (runOnlyOnce){return prev}
+      runOnlyOnce = true
 
       // We'll take the previous tree state to modify it
       const headTreeUpdate = JSON.parse(JSON.stringify(prev))
@@ -459,19 +439,19 @@ console.log("------------------------------------------")
       var treeUpdate = headTreeUpdate
       var queue = []
       queue.push(treeUpdate)
-      var childNumber = ""
+      
 
       // Same loop as before , BFS until we find the node to delete as a child
       while (queue.length !== 0){
         treeUpdate = queue.shift()
 
         // The check
-        if (treeUpdate.child1 != null && treeUpdate.child1.index === nodeToDelete){
-          childNumber = "child1"
+        if (treeUpdate.child1 != null && treeUpdate.child1.index === nodeToDelete && treeUpdate.height === parentHeight){
+          treeUpdate.child1 = null
           break;
         }
-        if (treeUpdate.child2 != null && treeUpdate.child2.index === nodeToDelete){
-          childNumber = "child2"
+        if (treeUpdate.child2 != null && treeUpdate.child2.index === nodeToDelete && treeUpdate.height === parentHeight){
+          treeUpdate.child2 = null
           break;
         }
 
@@ -483,46 +463,24 @@ console.log("------------------------------------------")
           queue.push(treeUpdate.child2)
         }
       }
-
+console.log("last node",treeUpdate)
       // Based on the position of the node to delete from the parent standpoint 
       // we'll repeat the same process and delete it , including automatically all of its children
-      treeUpdate[childNumber] = null
+      //treeUpdate[childNumber] = null
 
       // Need to take into account how many nodes were deleted to resize the indexes,
       // which will depend on the children nested inside nodeToDelete
       // This can be done using different methods , but probably one of the easiest 
       // is using the nodes state
 
-      var nodesDeleted = 0
-      queue = []
-      // We can just take the current position of the node to delete from the map array to set
-      // it as starting point to perform bfs over its children and counting every time we find one
-      var nodeDeleted = JSON.parse(JSON.stringify(treeNodes[nodeToDelete]))
-      queue.push(nodeDeleted)
-
-      // BFS
-      while (queue.length !== 0){
-        nodeDeleted = queue.shift();
-
-        // We'll only add to the queue non null nodes and we are going to pop each one of them until empty
-        if (nodeDeleted.child1 != null){
-          queue.push(nodeDeleted.child1)
-        }
-        if (nodeDeleted.child2 != null){
-          queue.push(nodeDeleted.child2)
-        }
-        // We mark that we visited a node
-        nodesDeleted += 1
-      }
-
-      // Also we'll need to update the indexes of the nodes for further deletions,
-      // just like we did with map nodes 
+      
       var indexUpdate = headTreeUpdate
       queue = []
       queue.push(indexUpdate)
 
       // We'll discount the nodes trying to be deleted to the current tree to set the new indexes
-      var indexCounter = treeNodes.length - 1 - nodesDeleted
+      var indexCounter = oldTreeNodes.length - 1
+      //nodesDeleted
 
       // And BFS once again 
       while(queue.length !== 0){
@@ -541,6 +499,10 @@ console.log("------------------------------------------")
       // We return the head that saves all the binary tree with the changes made
       return headTreeUpdate
      })
+      return oldTreeNodes
+    })
+
+    
   }
 // Hide add button on height 4
   return (<div>
