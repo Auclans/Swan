@@ -98,29 +98,33 @@ export default function BinaryTreeContent() {
           child2 : null
         }
       }
-
       auxNodes.push(auxNode)
     }
   }
 
+  // And we'll add a key to mark the head so that we dont allow its deletion when mapping
+  auxNodes[auxNodes.length-1] = {
+    ...auxNodes[auxNodes.length-1] ,
+    head : true 
+  }
+
   // The state that will be mapped 
   var [treeNodes,setTreeNodes] = React.useState(auxNodes)
-console.log("map",treeNodes)
+
   // And the real binary tree 
   var [head,setHead] = React.useState(auxNodes[auxNodes.length-1])
-console.log("tree",head)
-console.log("------------------------------------------")
+
   // The node that the user will input 
   var [nodeToAdd,setNodeToAdd] = React.useState("")
 
-  var [blockNodeAdd,setBlockNodeAdd] = React.useState(false)
-
-  
+  // We'll limit the number of nodes that can be added by hiding the add 
+  // node input when the length of the nodes is the maximum that we allow
+  var [blockNodeAdd,setBlockNodeAdd] = React.useState(true)
 
   function addTreeNode(event){
     event.preventDefault();
 
-    // We are going to add the node to the left of the last height
+    // We are going to add nodes left to right from first popped height from the head 
     setTreeNodes(prev =>{
       var oldTreeNodes = JSON.parse(JSON.stringify(prev))
 
@@ -140,7 +144,7 @@ console.log("------------------------------------------")
 
         // We'll pop nodes out of the queue until we find a null child,when we'll break
 
-//
+        // First we handle edge case where a node has to be added as first child of parent
         if (lastNode.child1 == null && lastNode.child2 == null){
           childNumber = "both"
           // We are going 2 different cases : the parent node has other neighbours that have
@@ -182,9 +186,11 @@ console.log("------------------------------------------")
             }
           }
           break;
+        // Now we'll handle the addition of the node as child 1
         }else if (lastNode.child1 == null){
           childNumber = "child1"
           break;
+        // And as child 2
         }else if (lastNode.child2 == null){
           childNumber = "child2"
           break;
@@ -193,30 +199,22 @@ console.log("------------------------------------------")
         queue.push(lastNode.child2)
       }
 
-      // We'll use the node to fill properties to define the new one
+      // We'll use the parent node to fill some properties to define the new one
 
       const lastNodeYPosition = lastNode.yPosition;
       const lastNodeHeight = lastNode.height
 
-      // Handle of xPosition 
-      
-      // We'll need to place the node in the right position in the array and 
-      // also refactor the indexes to show the new situation
-      
-      // We'll use the brother of the child trying to be filled to know
-      // the position where is must be placed , because theres always going
-      // to be a child brother at any point except the head of the tree
-      // This can be done with the parent that popped in the bfs 
-
-      // Given the order of the render of the array , it starts from bottom right
-      // and advances to the left automatically changing the height until head ,
-      // we'll need to add 1 position if the child that popped was 1 and substract 1 if child2
+      // Now we'll handle the position of the node . To do that we are going to 
+      // take the parent position , and add a shift based on the height of the 
+      // parent , because each height has a particular and characteristic distance
+      // between nodes . We'll use the array defined at the beginning that stores half distances
       var indexToPlace = 0
 
-      var parentHeight = lastNode.height ; console.log("parent height",parentHeight)
-      var childShift = heightsShifts[parentHeight];console.log("array shifts",heightsShifts[parentHeight])
+      var parentHeight = lastNode.height ; 
+      var childShift = heightsShifts[parentHeight];
       
-
+      // The different scenarios based on the position to locate the node based on 
+      // on the result popped in the parent in the queue
       if (childNumber === "child1"){
         indexToPlace = lastNode.child2.index + 1
         var newXPosition = lastNode.xPosition + childShift
@@ -228,6 +226,7 @@ console.log("------------------------------------------")
         newXPosition = lastNode.xPosition + childShift
       }
 
+      // Now we are going to create the node based on the number of the input
       // Also ,we are just going to add one node , so we set both child1 and 2 to null
       var newNode = {
         value : Number(nodeToAdd),
@@ -238,9 +237,11 @@ console.log("------------------------------------------")
         index : "definedLater",
         height : lastNodeHeight + 1
       }
+      // Must overwrite childnumber if it comes from both not to create new key both
       if (childNumber === "both"){
         childNumber = "child1"
       }
+      // We make the parent node in the array point to the new node
       oldTreeNodes[lastNode.index][childNumber] = newNode
       // We'll add the new node to the right index
       oldTreeNodes.splice(indexToPlace,0,newNode)
@@ -257,6 +258,7 @@ console.log("------------------------------------------")
 
       // Need to setup this boolean variable to avoid the setHead from running 2 times
       // Cant understand why it happens but this fixes it because it avoid rerun in the loop
+      // Maybe it is related to the fact that we are updating a state inside the update of another state
       var found = false
 
       setHead((prev)=>{
@@ -270,6 +272,7 @@ console.log("------------------------------------------")
           traverseTree = queue.shift();
 
           // We'll develop the 3 possible scenarios , avoiding the double render mistery in all of them
+          // If we are in the both case we'll add it as first child
           if (traverseTree.child1 == null && traverseTree.child2 == null && found === false){
             traverseTree.child1 = newNode
             found = true
@@ -291,6 +294,7 @@ console.log("------------------------------------------")
           }
         }
 
+        // And we also need to update the indexes for the real tree 
         var indexUpdate = newHead
         queue = []
         queue.push(indexUpdate)
@@ -309,14 +313,18 @@ console.log("------------------------------------------")
             queue.push(indexUpdate.child2)
           }
         }
-
         return newHead
-
       })
-        
       return oldTreeNodes
     })
     setNodeToAdd("")
+
+    // And we'll limit the input of the nodes of the tree hiding the bar to add when max size
+    if (treeNodes.length >= 14){
+      setBlockNodeAdd(true)
+    }else{
+      setBlockNodeAdd(false)
+    }
   }
 
   function deleteTreeNode(nodeToDelete){
@@ -463,24 +471,18 @@ console.log("------------------------------------------")
           queue.push(treeUpdate.child2)
         }
       }
-console.log("last node",treeUpdate)
-      // Based on the position of the node to delete from the parent standpoint 
-      // we'll repeat the same process and delete it , including automatically all of its children
-      //treeUpdate[childNumber] = null
 
       // Need to take into account how many nodes were deleted to resize the indexes,
       // which will depend on the children nested inside nodeToDelete
       // This can be done using different methods , but probably one of the easiest 
       // is using the nodes state
 
-      
       var indexUpdate = headTreeUpdate
       queue = []
       queue.push(indexUpdate)
 
       // We'll discount the nodes trying to be deleted to the current tree to set the new indexes
       var indexCounter = oldTreeNodes.length - 1
-      //nodesDeleted
 
       // And BFS once again 
       while(queue.length !== 0){
@@ -502,27 +504,27 @@ console.log("last node",treeUpdate)
       return oldTreeNodes
     })
 
-    
+    // We'll unlock the addition of nodes if less than max length 
+    if (treeNodes.length <= 15){
+      setBlockNodeAdd(false)
+    }
   }
-// Hide add button on height 4
+
   return (<div>
       {treeNodes.map( (node,index) => {
         return <TreeNode 
           key={index} 
           value={node.value}
-          height={node.height} 
-          child1={node.child1}
-          child2={node.child2}
+          head={node.head}
           xPosition={node.xPosition}
           yPosition={node.yPosition}
-          row={node.row}
-          column={node.column}
           index={node.index}
           deleteTreeNode={deleteTreeNode}
            />
       })}
 
       <div className='addTreeNode'>
+        {blockNodeAdd ? null : 
         <form onSubmit={addTreeNode}>
           <input onChange={(event)=>{setNodeToAdd(event.target.value)}} 
           value={nodeToAdd} 
@@ -530,7 +532,7 @@ console.log("last node",treeUpdate)
           placeholder='Add node'>
           </input>
           <input type="submit"></input>
-        </form>
+        </form>}
       </div>
    
     </div>
