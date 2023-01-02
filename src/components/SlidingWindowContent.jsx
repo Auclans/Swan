@@ -1,6 +1,11 @@
 import React from 'react'
 import Letter from "./Letter.jsx"
 import slidingWindow from "../slidingWindow.js"
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import SearchIcon from '@mui/icons-material/Search';
+
+
 
 export default function SlidingWindowContent() {
 
@@ -19,6 +24,7 @@ export default function SlidingWindowContent() {
     var randomLetterValue = letters[randomIndex]
     var randomLetter = {
       value : randomLetterValue,
+      index : i,
       color : "black"
     }
     auxLetters.push(randomLetter)
@@ -35,6 +41,7 @@ export default function SlidingWindowContent() {
       var randomLetterValue = letters[randomIndex]
       var randomLetter = {
         value : randomLetterValue,
+        index : i,
         color : "black"
       }
       auxLetters.push(randomLetter)
@@ -45,7 +52,7 @@ export default function SlidingWindowContent() {
   // The state that will keep track of the introduced string 
 
   var [inputString,setInputString] = React.useState("")
-
+//console.log(string)
   // We will map the letters of the string , show a restart button 
   // and show an input form that will run the sliding window algo when pressed
 
@@ -55,21 +62,24 @@ export default function SlidingWindowContent() {
         return <Letter value={letter.value} color={letter.color} key={index} />
       })}
     </div>
-    <div>
-      <button onClick={restartString} className="restart" >Restart</button>
+    <div className="restart">
+      <Button size="small" onClick={restartString}  >Restart</Button>
     </div>
     <div className='search'>
       <form onSubmit={(event)=> { 
       event.preventDefault();
       slidingWindow(string,setString,inputString);
       setInputString("")}}>
-        <input 
+        <TextField size="small"
           type="text" 
           value={inputString}
           onChange={(event)=> setInputString(event.target.value)} 
-          placeholder='Search substring'>
-        </input>
-        <input type="submit"></input>
+          placeholder='Search substring'
+          autoComplete="off">
+        </TextField>
+        <Button type="submit">
+          <SearchIcon size="small" />
+        </Button>
       </form>
     </div>
   </div>

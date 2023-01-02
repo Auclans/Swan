@@ -2,8 +2,9 @@ import React from 'react'
 import mergeSort from "../mergeSort.js"
 import quickSort from "../quickSort.js"
 import heapSort from "../heapSort.js"
-import countingSort from "../countingSort.js"
 import Column from './Column.jsx'
+import Button from '@mui/material/Button';
+
 
 export default function SortingAlgorithms() {
 
@@ -14,7 +15,7 @@ export default function SortingAlgorithms() {
 
   for (let i=0; i<150 ; i++){
     var randomNumber = Math.floor(Math.random()*151)
-    auxColumns.push({value : randomNumber, color : "lightBlue",index : i})
+    auxColumns.push({value : randomNumber, color : "#A6F1F5",index : i})
   }
 
   // We define a state with the array created because we will
@@ -31,8 +32,6 @@ export default function SortingAlgorithms() {
       quickSort(sortingColumns,setSortingColumns)
     }else if (name === "heapSort"){
       heapSort(sortingColumns,setSortingColumns)
-    }else if (name === "countingSort"){
-      countingSort(sortingColumns,setSortingColumns)
     }
   }
 
@@ -43,7 +42,7 @@ export default function SortingAlgorithms() {
 
   for (let i=0; i<150 ; i++){
     var randomNumber = Math.floor(Math.random()*151)
-    auxColumns.push({value : randomNumber, color : "lightBlue",index : i})
+    auxColumns.push({value : randomNumber, color : "#A6F1F5",index : i})
   }
   setSortingColumns(auxColumns)
 
@@ -51,10 +50,15 @@ export default function SortingAlgorithms() {
 
   return (<div>
       <div className='algorithmsList'>
-        <button onClick={sortingAlgoPressed} name="mergeSort" className='algoButton'>Merge sort</button>
-        <button onClick={sortingAlgoPressed} name="quickSort" className='algoButton'>Quick sort</button>
-        <button onClick={sortingAlgoPressed} name="heapSort" className='algoButton'>Heap sort</button>
-        <button onClick={sortingAlgoPressed} name="countingSort" className='algoButton'>Counting sort</button>
+        <div className='algoButton'>
+          <Button size="small" onClick={sortingAlgoPressed} name="mergeSort">Merge sort</Button>
+        </div>
+        <div className='algoButton'>
+          <Button size="small" onClick={sortingAlgoPressed} name="quickSort">Quick sort</Button>
+        </div>
+        <div className='algoButton'>
+          <Button size="small" onClick={sortingAlgoPressed} name="heapSort" >Heap sort</Button>
+        </div>
       </div>
       <div className='algoContent'>
         {sortingColumns.map( (column,index) => {
@@ -62,7 +66,7 @@ export default function SortingAlgorithms() {
         })}
       </div>
       <div className='restart'>
-        <button onClick={restartColumns}>Restart</button>
+        <Button size="small" onClick={restartColumns}>Restart</Button>
       </div>
     </div>
   )

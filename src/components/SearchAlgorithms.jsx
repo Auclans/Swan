@@ -2,6 +2,9 @@ import React from 'react'
 import binarySearch from "../binarySearch.js"
 import linearSearch from "../linearSearch.js"
 import Column from "./Column.jsx"
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import SearchIcon from '@mui/icons-material/Search';
 
 export default function SearchAlgorithms() {
 
@@ -12,7 +15,7 @@ export default function SearchAlgorithms() {
 
   for (let i=0; i<150 ; i++){
     var randomNumber = Math.floor(Math.random()*151)
-    auxLinearColumns.push({value : randomNumber, color : "lightblue",index : i})
+    auxLinearColumns.push({value : randomNumber, color : "#A6F1F5",index : i})
   }
 
   // We define a state with the array created because we will
@@ -26,7 +29,7 @@ export default function SearchAlgorithms() {
   var auxBinaryColumns = []
 
   for (let i=0; i<150 ; i++){
-    auxBinaryColumns.push({value : i, color : "lightblue",index : i})
+    auxBinaryColumns.push({value : i, color : "#A6F1F5",index : i})
   }
 
   var [binaryColumns,setBinaryColumns] = React.useState(auxBinaryColumns)
@@ -38,14 +41,22 @@ export default function SearchAlgorithms() {
   // And the state of the number to search
 
   var [numberToSearch,setNumberToSearch] = React.useState("")
+  var [wrongSearch,setWrongSearch] = React.useState(false)
 
   function runSearchingAlgo(event){
     event.preventDefault();
-    if (sortingAlgo){
-      binarySearch(numberToSearch,binaryColumns,setBinaryColumns)
-    }else if(!sortingAlgo){
-      linearSearch(numberToSearch,linearColumns,setLinearColumns)
-    }
+    if (numberToSearch>=0 && numberToSearch<=150){
+      setWrongSearch(false)
+      if (sortingAlgo){
+        binarySearch(numberToSearch,binaryColumns,setBinaryColumns)
+      }else if(!sortingAlgo){
+        linearSearch(numberToSearch,linearColumns,setLinearColumns)
+      }
+      else{
+        setWrongSearch(true)
+      }
+    } 
+    setNumberToSearch("")
   }
 
   // And we'll setup a restart button just for the linear search
@@ -55,7 +66,7 @@ export default function SearchAlgorithms() {
 
   for (let i=0; i<150 ; i++){
     var randomNumber = Math.floor(Math.random()*151)
-    auxLinearColumns.push({value : randomNumber, color : "lightBlue",index : i})
+    auxLinearColumns.push({value : randomNumber, color : "#A6F1F5",index : i})
   }
   setLinearColumns(auxLinearColumns)
 
@@ -63,8 +74,12 @@ export default function SearchAlgorithms() {
 
   return (<div>
       <div className='algorithmsList'>
-        <button onClick={()=> setSortingAlgo(false)} name="linearSearch" className='algoButton'>Linear search </button>
-        <button onClick={()=> setSortingAlgo(true)} name="binarySearch" className='algoButton'>Binary search</button>
+        <div className='algoButton'>
+          <Button size="small" onClick={()=> setSortingAlgo(false)} name="linearSearch" >Linear search </Button>
+        </div>
+        <div className="algoButton">
+          <Button size="small" onClick={()=> setSortingAlgo(true)} name="binarySearch" >Binary search</Button>
+        </div>
       </div>
       <div className='algoContent'>
         {sortingAlgo ? 
@@ -76,14 +91,22 @@ export default function SearchAlgorithms() {
           return <Column key={index} column={column.value} color={column.color}/>
         })}
       </div>
-      <div className='search'>
+{//Handle wrong search
+}
+      <div className='search' style={{color : wrongSearch ? "red" : null}} >
         <form onSubmit={runSearchingAlgo}>
-          <input type="text" onChange={(event)=>{setNumberToSearch(event.target.value)}} value={numberToSearch} placeholder='Search number (0-150)' ></input>
-          <input type="submit"></input>
+          <TextField type="text" size="small"
+            onChange={(event)=>{setNumberToSearch(event.target.value)}} 
+            value={numberToSearch} 
+            placeholder='Search number (0-150)'
+            ></TextField>
+          <Button type="submit">
+            <SearchIcon size="small"/>
+          </Button>
         </form>
       </div>
       <div className='restart'>
-        <button onClick={restartLinearColumns}>Restart</button>
+        <Button size="small" onClick={restartLinearColumns}>Restart</Button>
       </div>
     </div>
   )

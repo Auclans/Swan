@@ -1,4 +1,5 @@
 import React from 'react'
+import Button from '@mui/material/Button';
 
 export default function Navbar(props) {
 
@@ -24,10 +25,18 @@ export default function Navbar(props) {
 
   return (
     <div className='navBar'>
-            <button onClick={onlyShow} name="home" className='navBarItem'>Home</button>
-            <button onClick={onlyShow} name="sorting" className='navBarItem'>Sorting algorithms</button>
-            <button onClick={onlyShow} name="search" className='navBarItem'>Search algorithms</button>
-            <button onClick={onlyShow} name="other" className='navBarItem'>Other algorithms</button>
+            <div className="navBarItem">
+              <Button variant='outlined' size="small" onClick={onlyShow} name="home">Home</Button>
+            </div>
+            <div className="navBarItem">
+              <Button variant='outlined' size="small" onClick={onlyShow} name="sorting" className='navBarItem'>Sorting algorithms</Button>
+            </div>
+            <div className="navBarItem">
+              <Button variant='outlined' size="small" onClick={onlyShow} name="search" className='navBarItem'>Search algorithms</Button>
+            </div>
+            <div className="navBarItem">
+              <Button variant='outlined' size="small" onClick={onlyShow} name="other" className='navBarItem'>Other algorithms</Button>
+            </div>
     </div>
   )
  }

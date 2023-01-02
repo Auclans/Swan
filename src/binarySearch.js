@@ -8,7 +8,7 @@ function animateRegion(start,end,setBinaryColumns,shift){
             var binaryColumns = JSON.parse(JSON.stringify(prev))
             for (let i=0; i<binaryColumns.length;i++){
                 if (i>start && i<end){
-                    binaryColumns[i].color = "purple"
+                    binaryColumns[i].color = "#C147E9"
                 }
             }
             return binaryColumns
@@ -20,7 +20,7 @@ function animateRegion(start,end,setBinaryColumns,shift){
             var binaryColumns = JSON.parse(JSON.stringify(prev))
             for (let i=0; i<binaryColumns.length;i++){
                 if (i>start && i<end){
-                    binaryColumns[i].color = "lightblue"
+                    binaryColumns[i].color = "#A6F1F5"
                 }
             }
             return binaryColumns
@@ -32,7 +32,7 @@ function animateFound(middle,setBinaryColumns,shift){
     setTimeout(()=>{
         setBinaryColumns(prev=>{
             var binaryColumns = JSON.parse(JSON.stringify(prev))
-            binaryColumns[middle].color = "yellow"
+            binaryColumns[middle].color = "#FFE600"
             return binaryColumns
         })
     },shift+1)

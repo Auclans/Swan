@@ -6,7 +6,7 @@ export default function Columns(props) {
   const color = props.color
 
   return (
-    <div style={{height : column , backgroundColor : color ,border: '1px solid black'}} className="column">
+    <div style={{height : column , backgroundColor : color ,border: '0.05px solid white'}} className="column">
     </div>
   )
 }

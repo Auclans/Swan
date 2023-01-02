@@ -1,5 +1,9 @@
 import React from 'react'
 import TreeNode from "./TreeNode.jsx"
+import TextField from '@mui/material/TextField';
+import AddIcon from '@mui/icons-material/Add';
+import Button from '@mui/material/Button';
+
 
 // Quick reminder that binary tree ≠ binary search tree
 
@@ -526,12 +530,15 @@ export default function BinaryTreeContent() {
       <div className='addTreeNode'>
         {blockNodeAdd ? null : 
         <form onSubmit={addTreeNode}>
-          <input onChange={(event)=>{setNodeToAdd(event.target.value)}} 
+          <TextField onChange={(event)=>{setNodeToAdd(event.target.value)}} 
           value={nodeToAdd} 
           type="text" 
-          placeholder='Add node'>
-          </input>
-          <input type="submit"></input>
+          placeholder='Add node'
+          size="small">
+          </TextField>
+          <Button type="submit">
+            <AddIcon size="small"/>
+          </Button>
         </form>}
       </div>
    

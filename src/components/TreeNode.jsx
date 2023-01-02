@@ -1,4 +1,6 @@
 import React from 'react'
+import Button from '@mui/material/Button';
+
 
 export default function TreeNode(props) {
 
@@ -10,13 +12,23 @@ export default function TreeNode(props) {
 
   return (
     head ? 
-    <div style={{position : "absolute" ,right : xPosition + "vw"  , top : yPosition + "vh" }}>
+    <Button style={{position : "absolute" ,right : xPosition + "vw"  , top : yPosition + "vh" }} 
+    sx={ { borderRadius: 100 , color : "purple" } } 
+    size="small" 
+    variant="outlined" 
+    color="secondary">
         {value}
-    </div>
+    </Button>
     :
-    <button style={{position : "absolute" ,right : xPosition + "vw"  , top : yPosition + "vh" }} onClick={()=>props.deleteTreeNode(index)}>
+    <div className='node' >
+      <Button  style={{position : "absolute" ,right : xPosition + "vw"  , top : yPosition + "vh" }}
+      onClick={()=>props.deleteTreeNode(index)}
+      sx={ { borderRadius: 100 } } 
+      size="small" 
+      variant="outlined">
         {value}
-    </button>
+      </Button>
+    </div>
   )
 }
 

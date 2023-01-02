@@ -1,4 +1,62 @@
 
+function animateVisit(currentStringLetter,setString,shiftTraverse){
+    setTimeout(()=>{
+        setString((prev)=>{
+            var newString = JSON.parse(JSON.stringify(prev))
+            var currentLetter = currentStringLetter.index
+            newString[currentLetter].color = "#C147E9"
+            return newString
+        })
+    },shiftTraverse)
+}
+
+function animateFound(updatedString,leftPointer,rightPointer,setString,shiftFound){
+    setTimeout(()=>{
+        setString(prev=>{
+            var newString = JSON.parse(JSON.stringify(prev))
+
+            for (let i=0 ; i<newString.length ; i++){
+                if (i >= leftPointer && i <= rightPointer){
+                    console.log(newString[i])
+                    newString[i].color = "green"
+                }
+            }
+            return updatedString
+        })
+    },shiftFound)
+}
+
+function animateShrink(updatedString,setString,shiftShrink){
+    setTimeout(()=>{
+        setString(prev=>{
+            var newString = JSON.parse(JSON.stringify(prev))
+
+            updatedString[0].color = "black"
+            return newString
+        })
+    },shiftShrink)
+}
+
+function animateRestart(updatedString,setString,shiftRestart){
+    setTimeout(()=>{
+        setString(prev=>{
+            var newString = JSON.parse(JSON.stringify(prev))
+
+            for (let i=0 ; i<newString.length ; i++){
+                if ( newString[i].color === "#C147E9"){
+                    newString[i].color = "green"
+                }
+            }
+            return newString
+        })
+    },shiftRestart)
+}
+
+var shiftTraverse = 0
+var shiftFound = 0
+var shiftShrink = 0
+var shiftRestart = 0
+
 // O(n) solution because of the use of the sliding window
 
 function runSlidingWindow(string,setString,inputString){
@@ -63,10 +121,19 @@ function runSlidingWindow(string,setString,inputString){
     var setOfLettersHave = new Set()
     var totalLettersHave = 0
 
+    // We'll use a copy of the state to work handle its update
+
+    var updatedString = JSON.parse(JSON.stringify(string))
+
     // O(n) sorting window algorithm
 
     while (rightPointer < stringArray.length - 1){
         var currentStringLetter = stringArray[rightPointer]
+
+        // We animate the letter visited .We'll pass the state 
+        shiftTraverse += 50
+        animateVisit(updatedString[rightPointer],setString,shiftTraverse)
+
         // First we advance if the current letter read in the string isnt in 
         // the set of letters that we are looking for 
         if ( !setOfLettersNeeded.has(currentStringLetter) ){
@@ -119,7 +186,7 @@ function runSlidingWindow(string,setString,inputString){
                 }
             }
 
-            // We are going to get out if they dont match . We do it here to apply the break effectively
+            // We are going to get out if they dont match 
 
             if (!substringInside){
                 rightPointer += 1
@@ -135,6 +202,10 @@ function runSlidingWindow(string,setString,inputString){
                 // Save the current string and the length
                 const currentSubstring = stringArray.slice(leftPointer,rightPointer+1)
                 const currentLength = currentSubstring.length
+
+                // We'll animate the shrink
+                shiftFound += shiftTraverse + 50
+                animateFound(updatedString,leftPointer,rightPointer+1,setString,shiftFound);
 
                 // We'll update the final result every time we find a smaller substring 
                 if (currentLength <= minimumLength){
@@ -180,6 +251,11 @@ function runSlidingWindow(string,setString,inputString){
                         else if (lettersHave[letter] < countNeeded){
                             substringInside = false
                         }
+                        // And if theres still a substring we'll animate it
+                        if (substringInside === true){
+                            shiftShrink += shiftFound + 50
+                            animateShrink(updatedString,setString,shiftShrink);
+                        }
                     }
                 }
             }
@@ -187,6 +263,11 @@ function runSlidingWindow(string,setString,inputString){
             rightPointer += 1
         }
     }
+
+    // And we will restart the string 
+    shiftRestart = shiftShrink
+    animateRestart(updatedString,setString,shiftRestart);
+
     // Will return empty string if it doesnt found one
     return [minimumSubstring,minimumLength]
 }

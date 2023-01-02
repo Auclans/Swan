@@ -1,5 +1,8 @@
 import React from 'react'
 import ListNode from "./ListNode.jsx"
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
 
 export default function LinkedListContent() {
 
@@ -73,6 +76,7 @@ export default function LinkedListContent() {
 
     var [nodes,setNodes] = React.useState(listNodes)
     var [newNode , updateNewNode] = React.useState("")
+    var [hideAddBar,setHideAddBar] = React.useState(true)
 
     // The function that will add nodes to the end
 
@@ -82,7 +86,6 @@ export default function LinkedListContent() {
         const oldNodes = JSON.parse(JSON.stringify(prev))
 
         // We are going to specify the new node properties based on last one
-        // FFFIIIIIXXXXX
         const lastOldNode = oldNodes.length - 1
         const lastOldNodeIndex = oldNodes[lastOldNode].index
         const lastOldNodeXPosition = oldNodes[lastOldNode].xPosition
@@ -110,6 +113,11 @@ export default function LinkedListContent() {
 
       });
       updateNewNode("")
+      if (nodes.length <= 10){
+        setHideAddBar(false)
+      }else{
+        setHideAddBar(true)
+      }
     }
 
     // Need to take the pressed node as input to delete it ? 
@@ -151,11 +159,14 @@ export default function LinkedListContent() {
         }
         return oldNodes
       });
+      if (nodes.length <= 12){
+        setHideAddBar(false)
+      }
     }
 
-  return ( <div >
+  return ( <div>
       {nodes.map((node,index)=>{
-        return <div>
+        return <div >
           <ListNode 
           xPosition={node.xPosition} 
           yPosition={node.yPosition} 
@@ -169,12 +180,19 @@ export default function LinkedListContent() {
           />
         </div>
       })}
+      {hideAddBar ? null : 
       <div className='addNode'>
         <form onSubmit={addNode}>
-          <input onChange={(event)=>updateNewNode(event.target.value)} value={newNode} type='text' placeholder='Add node'></input>
-          <input type='submit'></input>
+          <TextField onChange={(event)=>updateNewNode(event.target.value)} 
+          value={newNode} 
+          type='text' 
+          placeholder='Add node' 
+          size="small"></TextField>
+          <Button type='submit'>
+            <AddIcon size="small"/>
+          </Button>
         </form>
-      </div>
+      </div>}
     </div>
   )
 }

@@ -2,6 +2,8 @@ import React from 'react'
 import SlidingWindowContent from "./SlidingWindowContent.jsx"
 import BinaryTreeContent from "./BinaryTreeContent.jsx"
 import LinkedListContent from "./LinkedListContent.jsx"
+import Button from '@mui/material/Button';
+
 
 export default function OtherAlgorithms() {
 
@@ -22,11 +24,17 @@ export default function OtherAlgorithms() {
 
   return (<div>
       <div className='algorithmsList'>
-        <button onClick={algoPressed} className='algoButton'>Sliding window</button>
-        <button onClick={algoPressed} name="linkedList" className='algoButton'>Linked list</button>
-        <button onClick={algoPressed} name="binaryTree" className='algoButton'>Binary tree</button>
+        <div className='algoButton'>
+          <Button size="small" onClick={algoPressed} >Sliding window</Button>
+        </div>
+        <div className='algoButton'>
+          <Button size="small" onClick={algoPressed} name="linkedList" >Linked list</Button>
+        </div>
+        <div className='algoButton'>
+          <Button size="small" onClick={algoPressed} name="binaryTree" >Binary tree</Button>
+        </div>
       </div>
-      <div>
+      <div >
         {linkedList ? 
         <LinkedListContent/> 
         : 

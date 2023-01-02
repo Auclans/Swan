@@ -1,5 +1,6 @@
 import React from 'react'
 import { BsArrowUpRight,BsArrowDownRight } from "react-icons/bs";
+import Button from '@mui/material/Button';
 
 export default function ListNode(props) {
 
@@ -24,8 +25,14 @@ export default function ListNode(props) {
   return (<div>
       <div style={{ position : "absolute" , 
       right : xPosition + "vw" , 
-      top : yPosition + "vh" }}>
-          {start ? <div>{value}</div> : <button onClick={()=>props.deleteNode(index)} className="button">{value}</button>}
+      top : yPosition + "vh" }} >
+        {
+        start ? <Button sx={ { borderRadius: 100 } } size="small" variant="outlined" color="secondary">{value}</Button> 
+        : 
+        <div >
+          <Button sx={ { borderRadius: 100 } } size="small" variant="outlined" onClick={()=>props.deleteNode(index)} className="button">{value}</Button>
+        </div>
+        }
       </div>
 
       <div>
@@ -38,17 +45,19 @@ export default function ListNode(props) {
         :
         booleanYPositionUp ? 
         <BsArrowDownRight style={{ position : "absolute",
-        right : xPosition - 6.5 + "vw" , 
-        top : yPosition + 2.5 + "vh",
-        height : "7.5vh" ,
+        right : xPosition - 5 + "vw" , 
+        top : yPosition + 4 + "vh",
+        height : "5.5vh" ,
         width : "9vw",
+        color : "#A6F1F5"
         }}/>
         :
         <BsArrowUpRight style={{ position : "absolute",
-        right : xPosition - 5.25 + "vw" , 
-        top : yPosition - 7.5 + "vh",
-        height : "7.5vh" ,
-        width : "9vw" }}/>
+        right : xPosition - 4.25 + "vw" , 
+        top : yPosition - 6 + "vh",
+        height : "5.5vh" ,
+        width : "9vw",
+        color : "#A6F1F5" }}/>
         }
       </div>
     </div>

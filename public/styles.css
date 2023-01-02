@@ -1,24 +1,26 @@
 .content{
     position: absolute;
-    left: 20vw;
+    left: 17.5vw;
     top: 15vh;
     height: 70vh;
-    width:60vw
+    width:62.5vw
 }
 
 .navBar{
     display: inline-block;
     position : absolute;
-    left : 30vw;
+    left : 0vw;
+    right : 0vw;
     top:7vh;
     height: 5vh;
-    width : 40vw;
+    width : 50vw;
     text-align: center;
+    margin: auto;
 }
 
 .navBarItem{
     display: inline-block;
-    margin : 0vh 1vw;
+    margin: 0vh 0.75vw;
 }
 
 .algorithms {
@@ -34,7 +36,6 @@
 .algorithmsList{
     height: 3vh;
     text-align: center;
-
 }
 
 .algorithmsContent{
@@ -43,6 +44,7 @@
 
 .algoButton{
     margin : 0vh 1vw;
+    display: inline-block;
 }
 
 .algoContent{
@@ -53,7 +55,7 @@
 
 .column{
     display: inline-block;
-    width: 0.25vw;
+    width: 0.2712vw;
 } 
 
 .search{
@@ -64,7 +66,8 @@
 
 .restart{
     position: absolute;
-    right: 0;
+    right: 2vw;
+    top: 10vh;
 }
 
 .addNode{
@@ -96,3 +99,4 @@
     bottom : 5vh ;
     left : 22.5vw;
 }
+

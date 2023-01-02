@@ -3,14 +3,14 @@ function linearSearchAnimation(column,shift,setSearchColumns){
     setTimeout(()=>{
         setSearchColumns(prev => {
             var newColumns = JSON.parse(JSON.stringify(prev))
-            newColumns[column].color = "purple"
+            newColumns[column].color = "#C147E9"
             return newColumns
         })
     },shift)
     setTimeout(()=>{
         setSearchColumns(prev => {
             var newColumns = JSON.parse(JSON.stringify(prev))
-            newColumns[column].color = "lightblue"
+            newColumns[column].color = "#A6F1F5"
             return newColumns
         })
     },shift+50)
@@ -20,7 +20,7 @@ function foundAnimation(column,shift,setSearchColumns){
     setTimeout(()=>{
         setSearchColumns(prev => {
             var newColumns = JSON.parse(JSON.stringify(prev))
-            newColumns[column].color = "yellow"
+            newColumns[column].color = "#FFE600"
             return newColumns
         })
     },shift+51)
