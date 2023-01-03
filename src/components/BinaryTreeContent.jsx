@@ -534,7 +534,8 @@ export default function BinaryTreeContent() {
           value={nodeToAdd} 
           type="text" 
           placeholder='Add node'
-          size="small">
+          size="small"
+          autoComplete="off">
           </TextField>
           <Button type="submit">
             <AddIcon size="small"/>

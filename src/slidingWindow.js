@@ -1,6 +1,10 @@
+var timeout1;
+var timeout2;
+var timeout3;
+var timeout4;
 
 function animateVisit(currentStringLetter,setString,shiftTraverse){
-    setTimeout(()=>{
+    timeout1 = setTimeout(()=>{
         setString((prev)=>{
             var newString = JSON.parse(JSON.stringify(prev))
             var currentLetter = currentStringLetter.index
@@ -8,54 +12,34 @@ function animateVisit(currentStringLetter,setString,shiftTraverse){
             return newString
         })
     },shiftTraverse)
-}
-
-function animateFound(updatedString,leftPointer,rightPointer,setString,shiftFound){
-    setTimeout(()=>{
-        setString(prev=>{
+    timeout1 = setTimeout(()=>{
+        setString((prev)=>{
             var newString = JSON.parse(JSON.stringify(prev))
-
-            for (let i=0 ; i<newString.length ; i++){
-                if (i >= leftPointer && i <= rightPointer){
-                    console.log(newString[i])
-                    newString[i].color = "green"
-                }
-            }
-            return updatedString
-        })
-    },shiftFound)
-}
-
-function animateShrink(updatedString,setString,shiftShrink){
-    setTimeout(()=>{
-        setString(prev=>{
-            var newString = JSON.parse(JSON.stringify(prev))
-
-            updatedString[0].color = "black"
-            return newString
-        })
-    },shiftShrink)
-}
-
-function animateRestart(updatedString,setString,shiftRestart){
-    setTimeout(()=>{
-        setString(prev=>{
-            var newString = JSON.parse(JSON.stringify(prev))
-
-            for (let i=0 ; i<newString.length ; i++){
-                if ( newString[i].color === "#C147E9"){
-                    newString[i].color = "green"
-                }
+            var currentLetter = currentStringLetter.index
+            if (newString[currentLetter].color === "#C147E9"){
+                newString[currentLetter].color = "black"
             }
             return newString
         })
-    },shiftRestart)
+    },shiftTraverse+1000)
+}
+
+function animateMinimum(minimumSubstring,setString,shiftMinimum){
+    timeout2 = setTimeout(()=>{
+        setString(prev=>{
+            var newString = JSON.parse(JSON.stringify(prev))
+
+            for (let i=0 ; i<minimumSubstring.length ; i++){
+                let letterIndex = minimumSubstring[i].index
+                newString[letterIndex].color = "#FFE600"
+            }
+            return newString
+        })
+    },shiftMinimum)
 }
 
 var shiftTraverse = 0
-var shiftFound = 0
-var shiftShrink = 0
-var shiftRestart = 0
+var shiftMinimum = 0
 
 // O(n) solution because of the use of the sliding window
 
@@ -131,7 +115,7 @@ function runSlidingWindow(string,setString,inputString){
         var currentStringLetter = stringArray[rightPointer]
 
         // We animate the letter visited .We'll pass the state 
-        shiftTraverse += 50
+        shiftTraverse += 25
         animateVisit(updatedString[rightPointer],setString,shiftTraverse)
 
         // First we advance if the current letter read in the string isnt in 
@@ -203,14 +187,9 @@ function runSlidingWindow(string,setString,inputString){
                 const currentSubstring = stringArray.slice(leftPointer,rightPointer+1)
                 const currentLength = currentSubstring.length
 
-                // We'll animate the shrink
-                shiftFound += shiftTraverse + 50
-                animateFound(updatedString,leftPointer,rightPointer+1,setString,shiftFound);
-
                 // We'll update the final result every time we find a smaller substring 
                 if (currentLength <= minimumLength){
-                    minimumSubstring = currentSubstring
-                    minimumLength = currentLength
+                    minimumSubstring = updatedString.slice(leftPointer,rightPointer+1)                    
                 }
 
                 // Shrink left pointer
@@ -251,11 +230,6 @@ function runSlidingWindow(string,setString,inputString){
                         else if (lettersHave[letter] < countNeeded){
                             substringInside = false
                         }
-                        // And if theres still a substring we'll animate it
-                        if (substringInside === true){
-                            shiftShrink += shiftFound + 50
-                            animateShrink(updatedString,setString,shiftShrink);
-                        }
                     }
                 }
             }
@@ -264,16 +238,29 @@ function runSlidingWindow(string,setString,inputString){
         }
     }
 
-    // And we will restart the string 
-    shiftRestart = shiftShrink
-    animateRestart(updatedString,setString,shiftRestart);
+    // And we show the result
+    shiftMinimum = shiftTraverse + 1000
+    animateMinimum(minimumSubstring,setString,shiftMinimum)
 
-    // Will return empty string if it doesnt found one
-    return [minimumSubstring,minimumLength]
+    return [minimumSubstring,minimumLength]        
 }
 
 export default function slidingWindow(string,setString,inputString) {
+    
+    clearTimeout(timeout1)
+    clearTimeout(timeout2)
+    clearTimeout(timeout3)
+    clearTimeout(timeout4)
+    setString(prev=>{
+        var restart = JSON.parse(JSON.stringify(prev))
+        for (let i=0; i<restart.length ; i++){
+            restart[i].color = "black"
+        }
+        return restart
+    })
+
     const stringCopy = JSON.parse(JSON.stringify(string));
-    const [minimumSubstring,minimumLength] = runSlidingWindow(stringCopy,setString,inputString);
-    console.log(minimumSubstring,minimumLength)
+    runSlidingWindow(stringCopy,setString,inputString);
+    shiftTraverse = 0
+    shiftMinimum = 0
 };

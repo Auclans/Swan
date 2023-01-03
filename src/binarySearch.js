@@ -2,8 +2,12 @@
 // What makes the log n time is working with half the size
 // in each iteraction !!!
 
+var timeout1;
+var timeout2;
+var timeout3;
+
 function animateRegion(start,end,setBinaryColumns,shift){
-    setTimeout(()=>{
+    timeout1 = setTimeout(()=>{
         setBinaryColumns(prev=>{
             var binaryColumns = JSON.parse(JSON.stringify(prev))
             for (let i=0; i<binaryColumns.length;i++){
@@ -15,7 +19,7 @@ function animateRegion(start,end,setBinaryColumns,shift){
         })
     },shift)
 
-    setTimeout(()=>{
+    timeout2 = setTimeout(()=>{
         setBinaryColumns(prev=>{
             var binaryColumns = JSON.parse(JSON.stringify(prev))
             for (let i=0; i<binaryColumns.length;i++){
@@ -29,13 +33,13 @@ function animateRegion(start,end,setBinaryColumns,shift){
 }
 
 function animateFound(middle,setBinaryColumns,shift){
-    setTimeout(()=>{
+    timeout3 = setTimeout(()=>{
         setBinaryColumns(prev=>{
             var binaryColumns = JSON.parse(JSON.stringify(prev))
             binaryColumns[middle].color = "#FFE600"
             return binaryColumns
         })
-    },shift+1)
+    },shift+200)
 }
 
 var shift = 0
@@ -60,11 +64,23 @@ function recursiveBinarySearch(low,high,numberToSearch,binaryColumns,setBinaryCo
 }
 
 export default function binarySearch(numberToSearch,binaryColumns,setBinaryColumns) {
+
+    clearTimeout(timeout1)
+    clearTimeout(timeout2)
+    clearTimeout(timeout3)
+
+    setBinaryColumns(prev=>{
+        var resetedColors = JSON.parse(JSON.stringify(prev))
+        for (let i=0; i<resetedColors.length ; i++){
+            resetedColors[i].color = "#A6F1F5"
+        }
+        return resetedColors
+  })
+
     const copyBinaryColumns = JSON.parse(JSON.stringify(binaryColumns))
     numberToSearch = Number(numberToSearch)
     const low = 0
     const high = binaryColumns.length-1
     recursiveBinarySearch(low,high,numberToSearch,copyBinaryColumns,setBinaryColumns)
-
-
+    shift = 0
 }

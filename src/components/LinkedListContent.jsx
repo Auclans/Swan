@@ -187,6 +187,7 @@ export default function LinkedListContent() {
           value={newNode} 
           type='text' 
           placeholder='Add node' 
+          autoComplete="off"
           size="small"></TextField>
           <Button type='submit'>
             <AddIcon size="small"/>

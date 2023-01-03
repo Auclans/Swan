@@ -1,25 +1,19 @@
 
-function animateVisited(newColumn,setSortingColumns){
+function animateVisited(newIndex,oldValue,setSortingColumns,shift){console.log(newIndex)
      setTimeout(()=>{
         setSortingColumns(prev => {
             var newCols = JSON.parse(JSON.stringify(prev))
-            const index = newColumn.index
-            const newValue = newColumn.value
-            newCols[index].value = newValue
+            
+            newCols[newIndex].value = oldValue
             return newCols
         })
      },shift)
 }
 
-// function animateFound(){
-
-// }
-
 var shift = 0
+var showDouble = 0
 
 function recursiveMergeSort(sortingColumns,setSortingColumns){
-
-    shift += 25
 
     // The turnaround point : Single items will be collected in left/right list
     // What stops the split and begins the merge
@@ -54,29 +48,32 @@ function recursiveMergeSort(sortingColumns,setSortingColumns){
     while (rightPointer < rightList.length && leftPointer < leftList.length){
         if (rightList[rightPointer].value > leftList[leftPointer].value){
             sortingColumns[mergedPointer] = leftList[leftPointer]
-            animateVisited(sortingColumns[mergedPointer],setSortingColumns)
+            animateVisited(mergedPointer+showDouble,leftList[leftPointer].value,setSortingColumns,shift)
             leftPointer += 1
             mergedPointer += 1
         }else if (rightList[rightPointer].value <= leftList[leftPointer].value){
             sortingColumns[mergedPointer] = rightList[rightPointer]
-            animateVisited(sortingColumns[mergedPointer],setSortingColumns)
+            animateVisited(mergedPointer+showDouble,rightList[rightPointer].value,setSortingColumns,shift)
             rightPointer += 1
             mergedPointer += 1
         }
+        shift += 25
     }
 
     // Then we are just going to add resting items , which will be sorted for each list
     // because they come from recursion , so we can just add them directly 
     while (rightPointer < rightList.length){
         sortingColumns[mergedPointer] = rightList[rightPointer]
-        //animateVisited(leftList[leftPointer],setSortingColumns)
+        //animateVisited(mergedPointer,leftList[leftPointer].value,setSortingColumns,shift)
+        shift += 25
         rightPointer += 1
         mergedPointer += 1
     }
 
     while (leftPointer < leftList.length){
         sortingColumns[mergedPointer] = leftList[leftPointer]
-        //animateVisited(rightList[rightPointer],setSortingColumns)
+        //animateVisited(mergedPointer,rightList[rightPointer].value,setSortingColumns,shift)
+        shift += 25
         leftPointer += 1
         mergedPointer += 1
     }
@@ -85,12 +82,9 @@ function recursiveMergeSort(sortingColumns,setSortingColumns){
     // the parent call where they came from, left/right list .This way it will be 
     // used both as Δ1 or Δ2 return ,to reconstruct previous solutions bottom up
     return sortingColumns
-
 }
 
 export default function mergeSort(sortingColumns,setSortingColumns) {
   const colsCopy = JSON.parse(JSON.stringify(sortingColumns))
-  console.log(colsCopy)
-  const res = recursiveMergeSort(colsCopy,setSortingColumns)
-  console.log(res)
+  recursiveMergeSort(colsCopy,setSortingColumns)
 }

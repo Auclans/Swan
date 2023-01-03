@@ -10,8 +10,8 @@ export default function TreeNode(props) {
     const index = props.index
     const head = props.head
 
-  return (
-    head ? 
+  return ( <div>
+    {head ? 
     <Button style={{position : "absolute" ,right : xPosition + "vw"  , top : yPosition + "vh" }} 
     sx={ { borderRadius: 100 , color : "purple" } } 
     size="small" 
@@ -28,6 +28,7 @@ export default function TreeNode(props) {
       variant="outlined">
         {value}
       </Button>
+    </div>}
     </div>
   )
 }

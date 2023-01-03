@@ -19,7 +19,7 @@ export default function SlidingWindowContent() {
 
   var auxLetters = []
 
-  for (let i=0 ; i<110 ; i++){
+  for (let i=0 ; i<200 ; i++){
     var randomIndex = Math.floor(Math.random()*letters.length)
     var randomLetterValue = letters[randomIndex]
     var randomLetter = {
@@ -36,7 +36,7 @@ export default function SlidingWindowContent() {
 
   function restartString(){
     auxLetters = []
-    for (let i=0 ; i<110 ; i++){
+    for (let i=0 ; i<200 ; i++){
       var randomIndex = Math.floor(Math.random()*letters.length)
       var randomLetterValue = letters[randomIndex]
       var randomLetter = {

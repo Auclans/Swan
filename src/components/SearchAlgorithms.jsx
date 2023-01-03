@@ -99,6 +99,7 @@ export default function SearchAlgorithms() {
             onChange={(event)=>{setNumberToSearch(event.target.value)}} 
             value={numberToSearch} 
             placeholder='Search number (0-150)'
+            autoComplete="off"
             ></TextField>
           <Button type="submit">
             <SearchIcon size="small"/>
@@ -106,7 +107,7 @@ export default function SearchAlgorithms() {
         </form>
       </div>
       <div className='restart'>
-        <Button size="small" onClick={restartLinearColumns}>Restart</Button>
+        {sortingAlgo ? null : <Button size="small" onClick={restartLinearColumns}>Restart</Button>}
       </div>
     </div>
   )

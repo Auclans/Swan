@@ -92,6 +92,7 @@
     /* To center it using position absolute */
     left : 0vw;
     right : 0vw;
+    font-family :'Franklin Gothic Medium', sans-serif ;
 }
 
 .addTreeNode{
@@ -100,3 +101,10 @@
     left : 22.5vw;
 }
 
+.intro{
+    position: absolute;
+    top: 5vh;
+    font-family :'Franklin Gothic Medium', sans-serif ;
+    font-weight: lighter;
+    letter-spacing: 0.04vw;
+}

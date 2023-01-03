@@ -1,4 +1,29 @@
 
+function animateVisited(leftList,sortingColumns,rightList,setColumns,shift){
+    setTimeout(()=>{
+        setColumns(prev => {
+  console.log("total",sortingColumns)
+            var newCols = JSON.parse(JSON.stringify(prev))
+            var start = sortingColumns[0].index
+            var end = sortingColumns[sortingColumns.length - 1].index
+console.log("left",leftList,"right",rightList)
+            for (let i=start ; i<end+1 ; i++){
+                if (i<leftList.length && leftList.length !== 0){
+                    var index = sortingColumns[i].index
+                    newCols[index] = leftList[i].value
+                }else if (i>leftList.length && rightList.length !== 0){
+                    index = sortingColumns[i].index
+                    newCols[index] = rightList[i].value
+                }
+            }
+           return newCols
+       })
+    },shift)
+}
+
+var shift = 0
+
+
 function recursiveQuickSort(sortingColumns,setColumns){
 
     // Turn around point that will collect be collected in left/right list
@@ -42,6 +67,9 @@ function recursiveQuickSort(sortingColumns,setColumns){
     // traversed up->down, it doesnt resolve until the down allows it to happen ,and this 
     // is possible through this return , because parent call stack calls will collect it
     // in left/right list and use it as new input to solve the problem bottom up !
+
+    animateVisited(leftList,sortingColumns,rightList,setColumns,shift)
+    shift += 50
 
     return leftList.concat(pivot,rightList)
 }
