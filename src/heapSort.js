@@ -3,36 +3,42 @@ function swapNodes(oppositeNode1,oppositeNode2){
     return [oppositeNode1,oppositeNode2]
 }   
 
-function heapify(sortingColumns,currentSize){
+function heapify(sortingColumns,currentNode,parentIndex){
     // Due to the heap propertie
-    var parent = sortingColumns[currentSize].value
-    var leftChild = sortingColumns[currentSize*2].value
-    var rightChild = sortingColumns[currentSize*2 + 1].value
+    let parent = currentNode
+    let parentValue = currentNode.value
 
-    if (currentSize === 0){
-        console.log("beginning")
-        leftChild = sortingColumns[1].value
-        rightChild = sortingColumns[2].value
+    let leftChild = sortingColumns[parentIndex*2]
+    let leftChildValue = leftChild.value
+
+    let rightChild = sortingColumns[parentIndex*2 + 1]
+    let rightChildValue = rightChild.value
+
+    let max = parent
+
+    if (parentIndex === 0){
+        leftChild = sortingColumns[1]
+        leftChildValue = sortingColumns[1].value
+
+        rightChild = sortingColumns[2]
+        rightChildValue = sortingColumns[2].value
     }
-//console.log("ini",leftChild,parent,rightChild)
-    // First we'll check if the left child is greater than the parent
-    if (leftChild > parent){
-        [parent,leftChild] = swapNodes(leftChild,parent,sortingColumns)
+
+    if (leftChildValue > parentValue){
+        max = leftChild
     }
-    // Knowing if left is grater or not than parent we'll check the right
-    if (rightChild > parent){
-        [parent,rightChild] = swapNodes(rightChild,parent,sortingColumns)
+    if (rightChildValue > parentValue){
+        max = rightChild
     }
-    // Right child must also be greater that left child
-    if (rightChild > leftChild){
-        [rightChild,leftChild] = swapNodes(rightChild,leftChild,sortingColumns)
+
+    if (max === parent){
+        console.log(leftChild,parent,rightChild)
+        return [leftChild,parent,rightChild]
+    }else{
+        var change = swapNodes(parent,max)
+        max = change[0]
+        heapify(sortingColumns,max,parentIndex)
     }
-    sortingColumns[currentSize].value = parent
-    sortingColumns[currentSize*2].value = leftChild
-    sortingColumns[currentSize*2+1].value = rightChild
-//console.log("res",leftChild,parent,rightChild)
-//console.log("indexes",sortingColumns[currentSize].index,sortingColumns[currentSize*2].index,sortingColumns[currentSize*2+1].index)
-    return sortingColumns
 }
 
 function heap(sortingColumns,setSortingColumns){
@@ -47,10 +53,15 @@ function heap(sortingColumns,setSortingColumns){
     // place the nodes based on the double the length propertie
     // This way we'll just have to iterate through half the size
 
+    var heapSize = sortingColumns.length - 1
     var halfSize = Math.floor((sortingColumns.length - 1)/2)
 
-    for (let currentSize=halfSize ; currentSize>=0 ; currentSize --){
-        sortingColumns = heapify(sortingColumns,currentSize)
+    for (let currentPosition=halfSize ; currentPosition>=0 ; currentPosition --){
+        const [leftChild,parent,rightChild] = heapify(sortingColumns,sortingColumns[currentPosition],currentPosition)
+        sortingColumns[currentPosition] = parent
+        sortingColumns[currentPosition*2] = leftChild
+        sortingColumns[currentPosition*2+1] = rightChild
+        console.log(leftChild,parent,rightChild)
     }
 
     // Now sorting columns will be locally sorted
@@ -66,17 +77,9 @@ function heap(sortingColumns,setSortingColumns){
         // a parent if it is before the half length of the array , to the first position
         // of the array each time . 
 
-        var aux = JSON.parse(JSON.stringify(sortingColumns[currentSize]))
-        sortingColumns[currentSize] = JSON.parse(JSON.stringify(sortingColumns[0]))
-        sortingColumns[0] = aux
         
-console.log(0,sortingColumns[0],1,sortingColumns[1],2,sortingColumns[2],currentSize,sortingColumns[currentSize])
-        // Then we are going to run heapify with the new node in the beginning 
-        // This will automatically send the lesser elements to the back
-//console.log("before",sortingColumns)
-        sortingColumns = heapify(sortingColumns,0)
     }
-    console.log(sortingColumns)
+
     setSortingColumns(sortingColumns)
 }
 

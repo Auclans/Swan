@@ -1,5 +1,5 @@
 
-function animateVisited(newIndex,oldValue,setSortingColumns,shift){console.log(newIndex)
+function animateVisited(newIndex,oldValue,setSortingColumns,shift){
      setTimeout(()=>{
         setSortingColumns(prev => {
             var newCols = JSON.parse(JSON.stringify(prev))
@@ -11,13 +11,20 @@ function animateVisited(newIndex,oldValue,setSortingColumns,shift){console.log(n
 }
 
 var shift = 0
-var showDouble = 0
 
 function recursiveMergeSort(sortingColumns,setSortingColumns){
 
     // The turnaround point : Single items will be collected in left/right list
     // What stops the split and begins the merge
     if (sortingColumns.length <= 1){return sortingColumns}
+
+    // We'll save initial indexes for the current recursion call, because we'll use 
+    // them to show the new values after the sortion has ocurred 
+    var positions = []
+    for (let i=0 ; i<sortingColumns.length ; i++){
+        var currentIndex = sortingColumns[i].index
+        positions.push(currentIndex)
+    }
 
     // We are going to split the recursive columns in left and right based of middle
     const middle = Math.floor(sortingColumns.length/2)
@@ -44,38 +51,58 @@ function recursiveMergeSort(sortingColumns,setSortingColumns){
     var leftPointer = 0
     var mergedPointer = 0
 
+    var i = 0
     // First we are going to use 2 pointers to build the new sorted array 
     while (rightPointer < rightList.length && leftPointer < leftList.length){
         if (rightList[rightPointer].value > leftList[leftPointer].value){
+
+            // The new value of the current position
             sortingColumns[mergedPointer] = leftList[leftPointer]
-            animateVisited(mergedPointer+showDouble,leftList[leftPointer].value,setSortingColumns,shift)
+
+            // We animate the initial position index with the new value
+            animateVisited(positions[i],leftList[leftPointer].value,setSortingColumns,shift)
+
             leftPointer += 1
             mergedPointer += 1
         }else if (rightList[rightPointer].value <= leftList[leftPointer].value){
+
             sortingColumns[mergedPointer] = rightList[rightPointer]
-            animateVisited(mergedPointer+showDouble,rightList[rightPointer].value,setSortingColumns,shift)
+
+            animateVisited(positions[i],rightList[rightPointer].value,setSortingColumns,shift)
+
             rightPointer += 1
             mergedPointer += 1
         }
-        shift += 25
+        shift += 15
+
+        // Also need to update the position array
+        i += 1
     }
 
     // Then we are just going to add resting items , which will be sorted for each list
     // because they come from recursion , so we can just add them directly 
+    // It will only run one of the two whiles , because to get here one had to break the length
+    // while the other didnt
     while (rightPointer < rightList.length){
         sortingColumns[mergedPointer] = rightList[rightPointer]
-        //animateVisited(mergedPointer,leftList[leftPointer].value,setSortingColumns,shift)
-        shift += 25
+
+        animateVisited(positions[i],rightList[rightPointer].value,setSortingColumns,shift)
+
+        shift += 15
         rightPointer += 1
         mergedPointer += 1
+        i += 1
     }
 
     while (leftPointer < leftList.length){
         sortingColumns[mergedPointer] = leftList[leftPointer]
-        //animateVisited(mergedPointer,rightList[rightPointer].value,setSortingColumns,shift)
-        shift += 25
+
+        animateVisited(positions[i],leftList[leftPointer].value,setSortingColumns,shift)
+
+        shift += 15
         leftPointer += 1
         mergedPointer += 1
+        i += 1
     }
 
     // Finally we have to merge the same level parts so that they are collected by 

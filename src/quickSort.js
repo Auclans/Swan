@@ -1,20 +1,13 @@
 
-function animateVisited(leftList,sortingColumns,rightList,setColumns,shift){
+function animateVisited(leftList,positions,rightList,setColumns,shift){
     setTimeout(()=>{
         setColumns(prev => {
-  console.log("total",sortingColumns)
             var newCols = JSON.parse(JSON.stringify(prev))
-            var start = sortingColumns[0].index
-            var end = sortingColumns[sortingColumns.length - 1].index
-console.log("left",leftList,"right",rightList)
-            for (let i=start ; i<end+1 ; i++){
-                if (i<leftList.length && leftList.length !== 0){
-                    var index = sortingColumns[i].index
-                    newCols[index] = leftList[i].value
-                }else if (i>leftList.length && rightList.length !== 0){
-                    index = sortingColumns[i].index
-                    newCols[index] = rightList[i].value
-                }
+            var totalList = leftList.concat(rightList)
+            var totalLength = totalList.length
+
+            for (let i=0 ; i<totalLength ; i++){
+                newCols[positions[i]].value = totalList[i].value
             }
            return newCols
        })
@@ -22,7 +15,6 @@ console.log("left",leftList,"right",rightList)
 }
 
 var shift = 0
-
 
 function recursiveQuickSort(sortingColumns,setColumns){
 
@@ -40,7 +32,14 @@ function recursiveQuickSort(sortingColumns,setColumns){
     // with the pivot , placing them to the right if they are greater and to 
     // to the left if they are lesser .This can directly be implemented using
     // two lists and concatenating them with the pivot 
+
+    // The same way that with merge sort , we'll keep track of the initial positions
+    // for each call stack , and we'll use them to show the visual results
+    var positions = []
+
     for (let i=1;i<sortingColumns.length;i++){
+        var currentIndex = sortingColumns[i].index
+        positions.push(currentIndex)
         if (sortingColumns[i].value < pivot.value){
             leftList.push(sortingColumns[i])
         }else if (sortingColumns[i].value >= pivot.value){
@@ -68,14 +67,30 @@ function recursiveQuickSort(sortingColumns,setColumns){
     // is possible through this return , because parent call stack calls will collect it
     // in left/right list and use it as new input to solve the problem bottom up !
 
-    animateVisited(leftList,sortingColumns,rightList,setColumns,shift)
-    shift += 50
+    animateVisited(leftList,positions,rightList,setColumns,shift)
+    shift += 75
 
     return leftList.concat(pivot,rightList)
 }
 
 export default function quickSort(sortingColumns,setColumns){
     const colsCopy = JSON.parse(JSON.stringify(sortingColumns))
-    const res = recursiveQuickSort(colsCopy,setColumns)
-    console.log(res)
+    recursiveQuickSort(colsCopy,setColumns)
+    
+    // Because of the animation , we need to cover the corner case of the initial node not
+    // being showed visually 
+    // We'll just sort them by the value key to fix it , the algo was right and it already run
+    // so basically nothing changes except that we have to cover the visual bug 
+    // If we get to this point all the visual path of the algo will already have ocurred , so
+    // using the last shift and sorting the columns directly is the same than visually sorting 1st col
+    setTimeout(()=>{
+        setColumns(prev=>{
+            var newCols = JSON.parse(JSON.stringify(prev))
+            newCols.sort((a,b)=> {return a.value - b.value});
+
+            return newCols
+        })
+    },shift)
+
+    shift = 0
 }
