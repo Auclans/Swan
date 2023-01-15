@@ -12,8 +12,9 @@ export default function SearchAlgorithms() {
   // data for linear Search , so we it doesnt need to be sorted
   
   var auxLinearColumns = []
+  const numberOfColumns = window.innerWidth/13.75
 
-  for (let i=0; i<150 ; i++){
+  for (let i=0; i<numberOfColumns ; i++){
     var randomNumber = Math.floor(Math.random()*151)
     auxLinearColumns.push({value : randomNumber, color : "#A6F1F5",index : i})
   }
@@ -28,7 +29,7 @@ export default function SearchAlgorithms() {
 
   var auxBinaryColumns = []
 
-  for (let i=0; i<150 ; i++){
+  for (let i=0; i<numberOfColumns ; i++){
     auxBinaryColumns.push({value : i, color : "#A6F1F5",index : i})
   }
 
@@ -64,7 +65,7 @@ export default function SearchAlgorithms() {
   function restartLinearColumns(){
     auxLinearColumns = []
 
-  for (let i=0; i<150 ; i++){
+  for (let i=0; i<numberOfColumns ; i++){
     var randomNumber = Math.floor(Math.random()*151)
     auxLinearColumns.push({value : randomNumber, color : "#A6F1F5",index : i})
   }
@@ -73,7 +74,7 @@ export default function SearchAlgorithms() {
   }
 
   return (<div>
-      <div className='algorithmsList'>
+      <div className='algos'>
         <div className='algoButton'>
           <Button size="small" onClick={()=> setSortingAlgo(false)} name="linearSearch" >Linear search </Button>
         </div>

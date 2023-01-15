@@ -514,7 +514,7 @@ export default function BinaryTreeContent() {
     }
   }
 
-  return (<div>
+  return (<div className='tree'>
       {treeNodes.map( (node,index) => {
         return <TreeNode 
           key={index} 

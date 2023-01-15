@@ -15,9 +15,9 @@ export default function LinkedListContent() {
 
     var randomNumber = Math.floor(Math.random()*11)
 
-    var xPosition = 5
-    var yPositionUp = 20
-    var yPositionDown = 30
+    var xPosition = 25
+    var yPositionUp = 40
+    var yPositionDown = 50
 
     listNodes[10] = {
       value : randomNumber, 
@@ -181,7 +181,7 @@ export default function LinkedListContent() {
         </div>
       })}
       {hideAddBar ? null : 
-      <div className='addNode'>
+      <div className='search'>
         <form onSubmit={addNode}>
           <TextField onChange={(event)=>updateNewNode(event.target.value)} 
           value={newNode} 

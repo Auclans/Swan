@@ -23,7 +23,7 @@ export default function OtherAlgorithms() {
   }
 
   return (<div>
-      <div className='algorithmsList'>
+      <div className='algos'>
         <div className='algoButton'>
           <Button size="small" onClick={algoPressed} >Sliding window</Button>
         </div>

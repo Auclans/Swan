@@ -12,8 +12,9 @@ export default function SortingAlgorithms() {
   // data that is going that is going to initialize the bars
   
   var auxColumns = []
+  const numberOfColumns = window.innerWidth/13.75
 
-  for (let i=0; i<150 ; i++){
+  for (let i=0; i<numberOfColumns ; i++){
     var randomNumber = Math.floor(Math.random()*151)
     auxColumns.push({value : randomNumber, color : "#A6F1F5",index : i})
   }
@@ -42,7 +43,7 @@ export default function SortingAlgorithms() {
   function restartColumns(){
     auxColumns = []
 
-    for (let i=0; i<150 ; i++){
+    for (let i=0; i<numberOfColumns ; i++){
       var randomNumber = Math.floor(Math.random()*151)
       auxColumns.push({value : randomNumber, color : "#A6F1F5",index : i})
     }
@@ -50,7 +51,7 @@ export default function SortingAlgorithms() {
   }
 
   return (<div>
-      <div className='algorithmsList'>
+      <div className='algos'>
         <div className='algoButton'>
           <Button size="small" onClick={sortingAlgoPressed} name="mergeSort">Merge sort</Button>
         </div>
